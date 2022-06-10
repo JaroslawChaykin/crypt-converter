@@ -20,3 +20,11 @@ export const nFormatter = (num) => {
     let item = lookup.slice().reverse().find(item => num >= item.value);
     return item ? (num / item.value).toFixed(1).replace(rx, "$1") + item.symbol : "0";
 }
+export const templateDateAndCurrency = (data, currency) => data.reduce((acc, item) => {
+    const {day, month} = getDate(item[0])
+    acc.push({
+        date: `${day}.${month < 10 ? `0${month}`: month}`,
+        [currency]: item[1].toFixed(2)
+    });
+    return acc;
+}, []);

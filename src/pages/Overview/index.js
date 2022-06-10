@@ -4,7 +4,7 @@ import ChartOfCrypt from '../../components/ChartOfCrypt/ChartOfCrypt';
 import { useFetching } from '../../hooks/useFetching';
 import CryptoService from '../../sevices/cryptoService';
 import MediaStream from '../../components/MediaStream/MediaStream';
-import { getDate } from '../../utils';
+import { templateDateAndCurrency } from '../../utils';
 import Select from '../../UI/select';
 
 const MediaSection = styled.div`
@@ -31,20 +31,10 @@ const Overview = () => {
     const [fetchCrypto, isLoading, error] = useFetching(async () => {
         const data = await CryptoService.getCryptocurrency(cryptoSelected)
         const dataHistory = await CryptoService.getCryptocurrencyHistory(cryptoSelected, currencySelected, 14)
-        setCryptoHistory(objectFromResponse(dataHistory.data.prices, currencySelected));
+        setCryptoHistory(templateDateAndCurrency(dataHistory.data.prices, currencySelected));
         setCrypto(data.data);
     });
-
-    const objectFromResponse = (data, currency) => data.reduce((acc, item) => {
-        const {day, month} = getDate(item[0])
-        acc.push({
-            date: `${day}.${month < 10 ? `0${month}`: month}`,
-            [currency]: item[1].toFixed(2)
-        });
-        return acc;
-    }, []);
-
-
+    
     useEffect(() => {
         fetchCrypto()
     }, [cryptoSelected, currencySelected]);
