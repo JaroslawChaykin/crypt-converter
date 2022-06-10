@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components'
-import twiiterIMG from '../../assets/images/twitter.png'
-import facebookIMG from '../../assets/images/facebook.png'
+import twitterIMG from '../../assets/images/twitter.png'
+import redditIMG from '../../assets/images/reddit.png'
 import { nFormatter } from '../../utils';
 
 const MediaStreamStyled = styled.div`
-  background: ${props => props.media === 'twitter' ? '#effbff' : '#eff7ff'};
+  background: ${props => props.twitter ? '#effbff' : '#fff9f3'};
   max-width: 275px;
   width: 100%;
   padding: 30px;
@@ -28,9 +28,9 @@ const MediaStreamStyled = styled.div`
         width: 100%;
         height: 100%;
         display: inline-block;
-        background: url(${props => props.twitter ? `${twiiterIMG}` : `${facebookIMG}`}) no-repeat;
+        background: url(${props => props.twitter ? `${twitterIMG}` : `${redditIMG}`}) no-repeat center;
         background-size: 25px 25px;
-        background-position: center;
+        
       }
     }
 
