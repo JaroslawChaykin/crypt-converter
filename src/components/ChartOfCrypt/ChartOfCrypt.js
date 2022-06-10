@@ -1,27 +1,27 @@
 import React from 'react';
 import { Area, AreaChart, Tooltip, XAxis, YAxis } from 'recharts';
 import { useEffect, useState } from 'react';
-import { useFetching } from '../hooks/useFetching';
-import axios from 'axios';
-import { getDate } from '../utils';
+import { useFetching } from '../../hooks/useFetching';
+import { getDate } from '../../utils';
+import CryptoService from '../../sevices/cryptoService';
 
 const ChartOfCrypt = ({crypt, currency = 'usd', days = '14'}) => {
 
     const [prices, setPrices] = useState([]);
 
     const [fetchPrices, isLoading, error] = useFetching(async () => {
-        const { data } = await axios.get(`https://api.coingecko.com/api/v3/coins/${crypt}/market_chart?vs_currency=${currency}&days=${days}&interval=daily`)
-        setPrices(getStructureObject(data.prices));
+        const { data } = await CryptoService.getCryptocurrencyHistory(crypt, currency, days)
+        setPrices(objectFromResponse(data.prices));
     });
 
-    const getStructureObject = data => data.reduce((acc, item) => {
+    const objectFromResponse = data => data.reduce((acc, item) => {
         const {day, month} = getDate(item[0])
         acc.push({
             date: `${day}.${month < 10 ? `0${month}`: month}`,
             [currency]: item[1].toFixed(2)
         });
         return acc;
-    }, []);;
+    }, []);
 
     useEffect(() => {
         fetchPrices();
